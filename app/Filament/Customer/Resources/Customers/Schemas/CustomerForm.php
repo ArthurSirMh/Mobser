@@ -14,7 +14,11 @@ class CustomerForm
             ->components([
                 TextInput::make('name')->required(),
                 TextInput::make('email')->unique()->email()->required(),
-                TextInput::make('password')->password()->required(),
+                TextInput::make('password')
+                    ->password()
+                    ->required(fn($livewire) => $livewire instanceof \Filament\Resources\Pages\CreateRecord)
+                    ->dehydrateStateUsing(fn($state) => filled($state) ? bcrypt($state) : null)
+                    ->dehydrated(fn($state) => filled($state)),
                 TextInput::make('melicode')->required(),
                 Select::make('class_id')
                     ->label('کلاس')
@@ -22,7 +26,12 @@ class CustomerForm
                     ->searchable()
                     ->preload()
                     ->required(),
-                
+                Select::make('roles')
+                    ->relationship('roles', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable()
+
             ]);
     }
 }
