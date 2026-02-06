@@ -28,8 +28,10 @@
         </style>
         <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
         <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
     </head>
     <div class="w-full h-full overflow-auto bg-gradient-to-br   p-8">
+        <input id="class_id" type="hidden" value={{ $class_id }}>
         <div class="max-w-6xl mx-auto"><!-- Header -->
             <header class="text-center mb-10">
                 <h1 class="text-4xl font-bold text-white mb-2">لیست دانش‌آموزان</h1>
@@ -45,17 +47,6 @@
                     </div>
                     <div class="text-slate-400 font-medium">
                         کل دانش‌آموزان
-                    </div>
-                </div>
-                <div class="bg-slate-900/70 backdrop-blur-md border border-blue-500/30 rounded-2xl p-6 text-center">
-                    <div class="text-4xl mb-3">
-                        🎓
-                    </div>
-                    <div class="text-3xl font-bold text-blue-500 mb-2">
-                        1
-                    </div>
-                    <div class="text-slate-400 font-medium">
-                        کلاس فعال
                     </div>
                 </div>
                 <div class="bg-slate-900/70 backdrop-blur-md border border-blue-500/30 rounded-2xl p-6 text-center">
@@ -85,29 +76,82 @@
                                     class="px-6 py-4 text-right text-blue-400 font-semibold border-b-2 border-blue-500/30">
                                     کد ملی</th>
                                 <th
-
                                     class="px-6 py-4 text-center text-blue-400 font-semibold border-b-2 border-blue-500/30">
                                     عملیات</th>
                             </tr>
                         </thead>
-                        @foreach ($students as $student)
-                            <tbody>
-                                <tr class="hover:bg-blue-500/10 transition-colors border-b border-blue-500/10">
-                                    <td class="px-6 py-5 text-white font-semibold">{{ $student->name }}</td>
-                                    <td class="px-6 py-5 text-slate-300">محمد</td>
-                                    <td class="px-6 py-5 text-slate-400 font-mono text-sm">{{ $student->melicode }}</td>
-                                    <td class="px-6 py-5 text-center"><button
-                                            class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:-translate-y-0.5 hover:shadow-lg hover:shadow-red-500/40 transition-all">
-                                            ثبت غیبت </button></td>
-                                </tr>
-                            </tbody>
-                        @endforeach
+                        <form id="absenceForm">
+                            @foreach ($students as $student)
+                                <tbody>
+                                    <tr class="hover:bg-blue-500/10 transition-colors border-b border-blue-500/10">
+                                        <td class="px-6 py-5 text-white font-semibold">{{ $student->name }}</td>
+                                        <td class="px-6 py-5 text-slate-300">محمد</td>
+                                        <td class="px-6 py-5 text-slate-400 font-mono text-sm">{{ $student->melicode }}
+                                        </td>
+                                        <td class="px-6 py-5 text-center">
+                                            <div>
+                                                <label>
+                                                    <input type="checkbox" class="student-checkbox"
+                                                        value="{{ $student->id }}">
+                                                    غیبت
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                @if ($student->last_absence && \Carbon\Carbon::parse($student->last_absence)->isToday())
+                                    <button class="btn btn-warning">
+                                        برگرداندن غیبت
+                                    </button>
+                                @endif
+                            @endforeach
+                        </form>
+
                     </table>
+                    @if (!empty($student))
+                        <button name="createAbsence" id="submitAbsence" value={{ $student->id }}
+                            class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:-translate-y-0.5 hover:shadow-lg hover:shadow-red-500/40 transition-all">
+                            ثبت غیبت </button>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
     <script>
+        const classId = document.getElementById('class_id')
+        document.getElementById('submitAbsence').addEventListener('click', function() {
+            const checkedStudents = document.querySelectorAll('.student-checkbox:checked');
+            const studentIds = [];
+            checkedStudents.forEach(checkbox => {
+                studentIds.push(checkbox.value);
+            });
+            const data = {
+                class_id: classId.value,
+                student_id: studentIds
+            };
+            fetch("create-absence", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result == 200) {
+                        toastr.success('با موفقیت انجام شد');
+                        window.location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        });
+
         (function() {
             function c() {
                 var b = a.contentDocument || a.contentWindow.document;

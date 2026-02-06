@@ -24,8 +24,7 @@ class CustomerForm
                     ->label('کلاس')
                     ->relationship('classes', 'class_name')
                     ->searchable()
-                    ->preload()
-                    ->required(),
+                    ->preload(),
                 Select::make('roles')
                     ->relationship('roles', 'name')
                     ->multiple()

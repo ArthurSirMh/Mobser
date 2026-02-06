@@ -18,10 +18,12 @@ class CustomersTable
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('email'),
-                TextColumn::make('melicode'),
-                TextColumn::make('classes.class_name')->label('کلاس')
+                TextColumn::make('name')->label('نام'),
+                TextColumn::make('email')->label('ایمیل'),
+                TextColumn::make('melicode')->label('کدملی'),
+                TextColumn::make('classes.class_name')->label('کلاس'),
+                TextColumn::make('roles.name')
+
             ])
             ->filters([
                 TrashedFilter::make(),

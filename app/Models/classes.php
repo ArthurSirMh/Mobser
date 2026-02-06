@@ -16,5 +16,6 @@ class classes extends Model
     protected $fillable = [
         'class_name',
         'limit_student',
+        'is_active'
     ];
 }

@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
@@ -20,6 +21,11 @@ class classesTable
             ->columns([
                 TextColumn::make('class_name'),
                 TextColumn::make('limit_student'),
+                TextColumn::make('is_active')
+                    ->label('وضعیت')
+                    ->badge()
+                    ->color(fn($state) => $state ? 'success' : 'danger')
+                    ->formatStateUsing(fn($state) => $state ? 'فعال' : 'غیرفعال')
             ])
             ->filters([
                 TrashedFilter::make(),

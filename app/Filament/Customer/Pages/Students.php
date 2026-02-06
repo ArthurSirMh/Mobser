@@ -12,14 +12,17 @@ class Students extends Page
     protected static bool $shouldRegisterNavigation = false;
     public $students;
     public $total_student;
-    public function mount(Request $request) {
-        
-        if(empty($request->all())){
+    public $class_id;
+    public function mount(Request $request)
+    {
+
+        if (empty($request->all())) {
             return redirect()->route('filament.customer.pages.class-student');
         }
-        $student = User::where('class_id', $request->class_id)->get();
+        $this->class_id = $request->class_id;
+        $class = \App\Models\classes::findOrFail($this->class_id);
+        $student = User::where('class_id', $this->class_id)->get();
         $this->total_student = $student->count();
-        $class = \App\Models\classes::find($request->class_id);
         $this->students = $student;
     }
 }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('class_name');
             $table->string('limit_student')->nullable();
+            $table->string('is_active');
             $table->softDeletes();
             $table->timestamps();
         });

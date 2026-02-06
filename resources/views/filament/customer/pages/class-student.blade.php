@@ -44,14 +44,9 @@
                                     class="class-card-badge">فعال</span>
                             </div>
                             <div class="class-card-info">
-                                <div class="class-info-row"><span class="class-info-icon">👨‍🏫</span> <span
-                                        class="class-info-text">استاد احمدی</span>
-                                </div>
+
                                 <div class="class-info-row"><span class="class-info-icon">👥</span> <span
-                                        class="class-info-text">{{ $class->limit_student }} دانش‌آموز</span>
-                                </div>
-                                <div class="class-info-row"><span class="class-info-icon">🕐</span> <span
-                                        class="class-info-text">شنبه و دوشنبه 8-10</span>
+                                        class="class-info-text">{{ $class->limit_student }} ظرفیت کلاس</span>
                                 </div>
                             </div>
                         </div>
