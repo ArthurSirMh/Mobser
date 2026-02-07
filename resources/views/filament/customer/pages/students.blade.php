@@ -90,23 +90,24 @@
                                         </td>
                                         <td class="px-6 py-5 text-center">
                                             <div>
-                                                <label>
-                                                    <input type="checkbox" class="student-checkbox"
-                                                        value="{{ $student->id }}">
-                                                    غیبت
-                                                </label>
+                                                @if ($student->last_absence && \Carbon\Carbon::parse($student->last_absence)->isToday())
+                                                    <button type="button" class="btn btn-warning restore-absence"
+                                                        data-student-id="{{ $student->id }}">
+                                                        برگرداندن غیبت
+                                                    </button>
+                                                @else
+                                                    <label>
+                                                        <input type="checkbox" class="student-checkbox"
+                                                            value="{{ $student->id }}">
+                                                        غیبت
+                                                    </label>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
                                 </tbody>
-                                @if ($student->last_absence && \Carbon\Carbon::parse($student->last_absence)->isToday())
-                                    <button class="btn btn-warning">
-                                        برگرداندن غیبت
-                                    </button>
-                                @endif
                             @endforeach
                         </form>
-
                     </table>
                     @if (!empty($student))
                         <button name="createAbsence" id="submitAbsence" value={{ $student->id }}
@@ -151,7 +152,43 @@
                     console.error("Error:", error);
                 });
         });
+        document.addEventListener('DOMContentLoaded', function() {
 
+            document.querySelectorAll('.restore-absence').forEach(button => {
+                button.addEventListener('click', function() {
+
+                    const studentId = this.dataset.studentId;
+
+                    fetch('delete-absence', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').content,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                student_id: studentId
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data == 200) {
+                                toastr.success('غیبت با موفقیت حذف شد');
+                                location.reload(); // یا رفرش سطر
+                            } else {
+                                toastr.error('حذف انجام نشد');
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            toastr.error('خطای سرور');
+                        });
+
+                });
+            });
+
+        });
         (function() {
             function c() {
                 var b = a.contentDocument || a.contentWindow.document;

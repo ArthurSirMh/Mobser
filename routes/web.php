@@ -8,4 +8,6 @@ Route::get('/', function () {
 });
 Route::prefix('customer')->group(function () {
     Route::post('create-absence', [AbsenceController::class, 'create_absence']);
+    Route::post('delete-absence', [AbsenceController::class, 'delete_absence']);
+
 });

@@ -30,4 +30,17 @@ class absenceController extends Controller
             ], 500);
         }
     }
+    public function delete_absence(request $request)
+    {
+        if (!empty($request)) {
+            $deleted = Absence::where('user_id', $request->student_id)
+                ->whereDate('created_at', now())
+                ->delete();
+            $user = User::where('id', $request->student_id)->update(['last_absence' => null]);
+            if ($deleted > 0) {
+                return response()->json('200');
+            } else {
+            }
+        }
+    }
 }
