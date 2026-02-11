@@ -30,7 +30,6 @@ class CustomerForm
                     ->multiple()
                     ->preload()
                     ->searchable()
-
             ]);
     }
 }

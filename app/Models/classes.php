@@ -12,6 +12,11 @@ class classes extends Model
     {
         return $this->hasMany(User::class, 'class_id');
     }
+    public function absences()
+    {
+        return $this->hasMany(Absence::class, 'class_id');
+
+    }
 
     protected $fillable = [
         'class_name',

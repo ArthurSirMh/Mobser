@@ -18,7 +18,7 @@ class ClassStudent extends Page
     public function mount()
     {
         if (auth()->user()->hasRole(['director', 'teacher', 'deputy'])) {
-            $classes = \App\Models\classes::all();
+            $classes = \App\Models\classes::where('is_active','1')->get();
             $total_classes = $classes->count();
             $this->classes = $classes;
             $this->total_classes = $total_classes;
