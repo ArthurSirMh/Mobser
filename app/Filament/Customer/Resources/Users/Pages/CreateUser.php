@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Filament\Customer\Resources\Customers\Pages;
+namespace App\Filament\Customer\Resources\Users\Pages;
 
-use App\Filament\Customer\Resources\Customers\CustomerResource;
+use App\Filament\Customer\Resources\Users\UserResource;
 use App\Models\classes;
 use App\Models\User;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateCustomer extends CreateRecord
+class CreateUser extends CreateRecord
 {
-    protected static string $resource = CustomerResource::class;
+    protected static string $resource = UserResource::class;
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         if (empty($data['class_id'])) {

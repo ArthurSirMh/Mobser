@@ -6,7 +6,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
-class CustomerForm
+class UserForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -14,6 +14,7 @@ class CustomerForm
             ->components([
                 TextInput::make('name')->required(),
                 TextInput::make('email')->unique()->email()->required(),
+                TextInput::make('phone_number')->label('شماره تلفن')->unique(),
                 TextInput::make('password')
                     ->password()
                     ->required(fn($livewire) => $livewire instanceof \Filament\Resources\Pages\CreateRecord)

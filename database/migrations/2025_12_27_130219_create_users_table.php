@@ -14,11 +14,12 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('name')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('melicode')->nullable();
             $table->foreignId('class_id')->nullable()
-                ->constrained('classes')    
+                ->constrained('classes')
                 ->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();

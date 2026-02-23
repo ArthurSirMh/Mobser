@@ -18,13 +18,11 @@ return new class extends Migration {
             $table->foreignId('user_id')->nullable()
                 ->constrained('users')
                 ->onDelete('cascade');
+            $table->enum('message_is_send', ['0', '1', '2'])->default('0');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('absences');

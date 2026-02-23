@@ -2,17 +2,20 @@
 
 namespace App\Filament\Customer\Resources\Customers\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
-use Filament\Tables\Columns\Column;
+use Filament\Actions\ViewAction;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
-class CustomersTable
+class UsersTable
 {
     public static function configure(Table $table): Table
     {
@@ -30,6 +33,7 @@ class CustomersTable
             ])
             ->recordActions([
                 EditAction::make(),
+                ViewAction::make()
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
